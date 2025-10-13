@@ -2,48 +2,30 @@ import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
 import { MarketRegime } from "@/components/MarketRegime";
 import { ActivePositions } from "@/components/ActivePositions";
+import { SignalFeed } from "@/components/SignalFeed";
+import { BotControls } from "@/components/BotControls";
 import { NewsFeed } from "@/components/NewsFeed";
 import { RiskMetrics } from "@/components/RiskMetrics";
-import { PerformanceChart } from "@/components/PerformanceChart";
 import { AIIndicators } from "@/components/AIIndicators";
-import { BotControls } from "@/components/BotControls";
-import { SignalFeed } from "@/components/SignalFeed";
 import { 
-  DollarSign, 
-  TrendingUp, 
-  Target, 
   Activity,
-  Percent,
-  Clock
+  Target,
+  TrendingUp,
 } from "lucide-react";
 
-const Index = () => {
+const LiveMonitor = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
       <main className="p-6 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Trading Dashboard</h2>
-          <p className="text-muted-foreground">Comprehensive overview of your AI trading system</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Live Trading Monitor</h2>
+          <p className="text-muted-foreground">Real-time bot activity and market signals</p>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-          <StatCard
-            title="Total P/L"
-            value="$365"
-            change="+$127 today"
-            trend="up"
-            icon={DollarSign}
-          />
-          <StatCard
-            title="Win Rate"
-            value="67.8%"
-            change="+2.3% vs avg"
-            trend="up"
-            icon={Target}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatCard
             title="Active Trades"
             value="3"
@@ -52,25 +34,18 @@ const Index = () => {
             icon={Activity}
           />
           <StatCard
-            title="Daily Return"
-            value="+1.27%"
-            change="Above target"
-            trend="up"
-            icon={Percent}
-          />
-          <StatCard
-            title="Avg Hold Time"
-            value="4.2h"
-            change="Intraday mode"
-            trend="neutral"
-            icon={Clock}
-          />
-          <StatCard
-            title="Sharpe Ratio"
-            value="2.34"
-            change="+0.12 this week"
+            title="Today's P/L"
+            value="+$127"
+            change="+1.27%"
             trend="up"
             icon={TrendingUp}
+          />
+          <StatCard
+            title="Signals Generated"
+            value="12"
+            change="5 executed"
+            trend="neutral"
+            icon={Target}
           />
         </div>
 
@@ -78,7 +53,6 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
-            <PerformanceChart />
             <ActivePositions />
             <SignalFeed />
           </div>
@@ -97,4 +71,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default LiveMonitor;
