@@ -3,12 +3,9 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { TrendingUp } from "lucide-react";
 
 const data = [
-  { date: "Mon", balance: 10000 },
-  { date: "Tue", balance: 10150 },
-  { date: "Wed", balance: 10280 },
-  { date: "Thu", balance: 10420 },
-  { date: "Fri", balance: 10650 },
-  { date: "Sat", balance: 10580 },
+  { date: "Mon", balance: 10000 }, { date: "Tue", balance: 10150 },
+  { date: "Wed", balance: 10280 }, { date: "Thu", balance: 10420 },
+  { date: "Fri", balance: 10650 }, { date: "Sat", balance: 10580 },
   { date: "Sun", balance: 10720 },
 ];
 
@@ -30,15 +27,8 @@ export const PerformanceChart = () => {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis 
-              dataKey="date" 
-              stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '12px' }}
-            />
-            <YAxis 
-              stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '12px' }}
-            />
+            <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
+            <YAxis stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
             <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--card))',
@@ -47,14 +37,7 @@ export const PerformanceChart = () => {
                 color: 'hsl(var(--foreground))',
               }}
             />
-            <Area 
-              type="monotone" 
-              dataKey="balance" 
-              stroke="hsl(195 100% 50%)" 
-              fillOpacity={1} 
-              fill="url(#colorBalance)"
-              strokeWidth={2}
-            />
+            <Area type="monotone" dataKey="balance" stroke="hsl(195 100% 50%)" fillOpacity={1} fill="url(#colorBalance)" strokeWidth={2} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

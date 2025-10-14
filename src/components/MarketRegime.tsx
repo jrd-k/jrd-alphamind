@@ -4,12 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 export const MarketRegime = () => {
-  const regime = {
-    status: "Trending",
-    confidence: 78,
-    volatility: "Medium",
-    direction: "Bullish",
-  };
+  const regime = { status: "Trending", confidence: 78, volatility: "Medium", direction: "Bullish" };
 
   const getRegimeIcon = () => {
     if (regime.direction === "Bullish") return <TrendingUp className="h-5 w-5 text-bullish" />;

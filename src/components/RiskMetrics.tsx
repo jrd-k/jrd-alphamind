@@ -3,12 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Shield, AlertTriangle } from "lucide-react";
 
 export const RiskMetrics = () => {
-  const metrics = {
-    accountRisk: 5.2,
-    dailyRisk: 3.1,
-    maxDrawdown: 8.5,
-    exposureLimit: 8.0,
-  };
+  const metrics = { accountRisk: 5.2, dailyRisk: 3.1, maxDrawdown: 8.5, exposureLimit: 8.0 };
 
   return (
     <Card className="p-6 bg-card border-border shadow-card">

@@ -4,24 +4,9 @@ import { Brain, Target, Activity } from "lucide-react";
 
 export const AIIndicators = () => {
   const indicators = [
-    {
-      name: "Regime Model",
-      confidence: 78,
-      status: "Active",
-      icon: Brain,
-    },
-    {
-      name: "Exit Classifier",
-      confidence: 65,
-      status: "Monitoring",
-      icon: Target,
-    },
-    {
-      name: "Volatility Predictor",
-      confidence: 82,
-      status: "Active",
-      icon: Activity,
-    },
+    { name: "Regime Model", confidence: 78, status: "Active", icon: Brain },
+    { name: "Exit Classifier", confidence: 65, status: "Monitoring", icon: Target },
+    { name: "Volatility Predictor", confidence: 82, status: "Active", icon: Activity },
   ];
 
   return (
