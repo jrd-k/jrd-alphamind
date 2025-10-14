@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Activity, Settings } from "lucide-react";
+import { SymbolManager } from "@/components/SymbolManager";
 
 export const Header = () => {
   return (
@@ -21,14 +23,15 @@ export const Header = () => {
           </Badge>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <p className="text-sm font-medium text-foreground">$10,720.00</p>
-            <p className="text-xs text-bullish">+7.2% Total</p>
+        <div className="flex items-center gap-3">
+          <SymbolManager />
+          <div className="text-right border-l border-border pl-3">
+            <p className="text-sm font-semibold text-foreground">$10,720</p>
+            <p className="text-xs text-bullish">+7.2%</p>
           </div>
-          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-            <Settings className="h-5 w-5 text-muted-foreground" />
-          </button>
+          <Button variant="ghost" size="icon">
+            <Settings className="h-5 w-5" />
+          </Button>
         </div>
       </div>
     </header>

@@ -20,11 +20,10 @@ const LiveMonitor = () => {
       
       <main className="p-6 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Live Trading Monitor</h2>
-          <p className="text-muted-foreground">Real-time bot activity and market signals</p>
+          <h2 className="text-2xl font-bold text-foreground">Live Monitor</h2>
+          <p className="text-sm text-muted-foreground">Real-time activity & signals</p>
         </div>
 
-        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatCard
             title="Active Trades"
@@ -49,15 +48,12 @@ const LiveMonitor = () => {
           />
         </div>
 
-        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             <ActivePositions />
             <SignalFeed />
           </div>
 
-          {/* Right Column */}
           <div className="space-y-6">
             <BotControls />
             <MarketRegime />

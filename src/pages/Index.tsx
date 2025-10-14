@@ -23,12 +23,13 @@ const Index = () => {
       <Header />
       
       <main className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Trading Dashboard</h2>
-          <p className="text-muted-foreground">Comprehensive overview of your AI trading system</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+            <p className="text-sm text-muted-foreground">AI-powered trading overview</p>
+          </div>
         </div>
 
-        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <StatCard
             title="Total P/L"
@@ -74,16 +75,13 @@ const Index = () => {
           />
         </div>
 
-        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             <PerformanceChart />
             <ActivePositions />
             <SignalFeed />
           </div>
 
-          {/* Right Column */}
           <div className="space-y-6">
             <BotControls />
             <MarketRegime />

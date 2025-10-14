@@ -10,8 +10,8 @@ const Analytics = () => {
       
       <main className="p-6 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Trading Analytics</h2>
-          <p className="text-muted-foreground">Historical performance analysis and insights</p>
+          <h2 className="text-2xl font-bold text-foreground">Analytics</h2>
+          <p className="text-sm text-muted-foreground">Performance insights & metrics</p>
         </div>
 
         <AdvancedMetrics />
