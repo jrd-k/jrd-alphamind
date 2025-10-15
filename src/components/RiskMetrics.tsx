@@ -6,11 +6,16 @@ export const RiskMetrics = () => {
   const metrics = { accountRisk: 5.2, dailyRisk: 3.1, maxDrawdown: 8.5, exposureLimit: 8.0 };
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Risk Management</h3>
-          <Shield className="h-5 w-5 text-primary" />
+          <div>
+            <h3 className="text-lg font-bold text-foreground">Risk Management</h3>
+            <p className="text-xs text-muted-foreground mt-1">Real-time monitoring</p>
+          </div>
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Shield className="h-5 w-5 text-primary" />
+          </div>
         </div>
         
         <div className="space-y-4">

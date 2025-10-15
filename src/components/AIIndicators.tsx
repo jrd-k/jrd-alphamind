@@ -10,11 +10,16 @@ export const AIIndicators = () => {
   ];
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">AI Models</h3>
-          <Brain className="h-5 w-5 text-primary" />
+          <div>
+            <h3 className="text-lg font-bold text-foreground">AI Models</h3>
+            <p className="text-xs text-muted-foreground mt-1">Neural networks</p>
+          </div>
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Brain className="h-5 w-5 text-primary" />
+          </div>
         </div>
         
         <div className="space-y-4">

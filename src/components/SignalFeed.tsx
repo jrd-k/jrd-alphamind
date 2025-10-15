@@ -82,11 +82,14 @@ export const SignalFeed = () => {
   };
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Live Signal Feed</h3>
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+          <div>
+            <h3 className="text-xl font-bold text-foreground">Live Signal Feed</h3>
+            <p className="text-sm text-muted-foreground mt-1">Real-time trading signals</p>
+          </div>
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold px-3 py-1">
             <div className="h-2 w-2 bg-primary rounded-full mr-2 animate-pulse" />
             Live
           </Badge>

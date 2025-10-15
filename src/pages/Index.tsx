@@ -1,20 +1,22 @@
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
-import { MarketRegime } from "@/components/MarketRegime";
-import { ActivePositions } from "@/components/ActivePositions";
-import { NewsFeed } from "@/components/NewsFeed";
-import { RiskMetrics } from "@/components/RiskMetrics";
 import { PerformanceChart } from "@/components/PerformanceChart";
-import { AIIndicators } from "@/components/AIIndicators";
-import { BotControls } from "@/components/BotControls";
+import { ActivePositions } from "@/components/ActivePositions";
 import { SignalFeed } from "@/components/SignalFeed";
+import { BotControls } from "@/components/BotControls";
+import { MarketRegime } from "@/components/MarketRegime";
+import { RiskMetrics } from "@/components/RiskMetrics";
+import { AIIndicators } from "@/components/AIIndicators";
+import { NewsFeed } from "@/components/NewsFeed";
 import { 
-  DollarSign, 
   TrendingUp, 
   Target, 
   Activity,
-  Percent,
-  Clock
+  Wallet,
+  ShieldCheck,
+  Zap,
+  BarChart3,
+  Clock,
 } from "lucide-react";
 
 const Index = () => {
@@ -23,61 +25,79 @@ const Index = () => {
       <Header />
       
       <main className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
-            <p className="text-sm text-muted-foreground">AI-powered trading overview</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Comprehensive trading performance overview</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        {/* Primary Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total P/L"
-            value="$365"
-            change="+$127 today"
+            value="+$2,347"
+            change="+23.4% since start"
             trend="up"
-            icon={DollarSign}
+            icon={TrendingUp}
+          />
+          <StatCard
+            title="Account Balance"
+            value="$12,347"
+            change="$10,000 initial"
+            trend="up"
+            icon={Wallet}
           />
           <StatCard
             title="Win Rate"
-            value="67.8%"
-            change="+2.3% vs avg"
+            value="73.2%"
+            change="156/213 trades"
             trend="up"
             icon={Target}
           />
           <StatCard
             title="Active Trades"
             value="3"
-            change="6 layers total"
+            change="6 total layers"
             trend="neutral"
             icon={Activity}
           />
+        </div>
+
+        {/* Secondary Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            title="Daily Return"
-            value="+1.27%"
-            change="Above target"
+            title="Today's P/L"
+            value="+$127"
+            change="+1.03%"
             trend="up"
-            icon={Percent}
-          />
-          <StatCard
-            title="Avg Hold Time"
-            value="4.2h"
-            change="Intraday mode"
-            trend="neutral"
             icon={Clock}
           />
           <StatCard
-            title="Sharpe Ratio"
-            value="2.34"
-            change="+0.12 this week"
+            title="Risk Score"
+            value="5.2/10"
+            change="Safe zone"
+            trend="neutral"
+            icon={ShieldCheck}
+          />
+          <StatCard
+            title="Avg Win/Loss"
+            value="2.3x"
+            change="Risk:Reward ratio"
             trend="up"
-            icon={TrendingUp}
+            icon={BarChart3}
+          />
+          <StatCard
+            title="Bot Status"
+            value="Active"
+            change="12 signals today"
+            trend="up"
+            icon={Zap}
           />
         </div>
 
+        <PerformanceChart />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <PerformanceChart />
             <ActivePositions />
             <SignalFeed />
           </div>

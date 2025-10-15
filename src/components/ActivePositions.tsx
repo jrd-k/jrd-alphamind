@@ -40,12 +40,22 @@ const positions = [
 ];
 
 export const ActivePositions = () => {
+  const totalPL = positions.reduce((sum, p) => sum + p.pl, 0);
+  const totalLayers = positions.reduce((sum, p) => sum + p.layers, 0);
+
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Active Positions</h3>
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <h3 className="text-xl font-bold text-foreground">Active Positions</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Total P/L: <span className={totalPL >= 0 ? "text-bullish font-semibold" : "text-bearish font-semibold"}>
+                ${totalPL >= 0 ? "+" : ""}{totalPL}
+              </span> • {totalLayers} Layers
+            </p>
+          </div>
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 font-semibold px-3 py-1">
             {positions.length} Open
           </Badge>
         </div>

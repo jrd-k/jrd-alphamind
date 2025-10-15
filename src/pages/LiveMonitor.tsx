@@ -11,6 +11,9 @@ import {
   Activity,
   Target,
   TrendingUp,
+  Clock,
+  Radio,
+  Zap,
 } from "lucide-react";
 
 const LiveMonitor = () => {
@@ -24,7 +27,8 @@ const LiveMonitor = () => {
           <p className="text-sm text-muted-foreground">Real-time activity & signals</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Real-time Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatCard
             title="Active Trades"
             value="3"
@@ -45,6 +49,31 @@ const LiveMonitor = () => {
             change="5 executed"
             trend="neutral"
             icon={Target}
+          />
+        </div>
+
+        {/* Live Activity Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StatCard
+            title="Live Updates"
+            value="127"
+            change="Last min"
+            trend="up"
+            icon={Radio}
+          />
+          <StatCard
+            title="Signal Speed"
+            value="0.3s"
+            change="Avg latency"
+            trend="neutral"
+            icon={Zap}
+          />
+          <StatCard
+            title="Last Trade"
+            value="2m ago"
+            change="EUR/USD BUY"
+            trend="up"
+            icon={Clock}
           />
         </div>
 

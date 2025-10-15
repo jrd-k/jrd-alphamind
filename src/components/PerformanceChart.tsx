@@ -36,10 +36,13 @@ export const PerformanceChart = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<keyof typeof timeframes>("1W");
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Performance Curve</h3>
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h3 className="text-xl font-bold text-foreground">Performance Curve</h3>
+            <p className="text-sm text-muted-foreground mt-1">Track your trading growth over time</p>
+          </div>
           <div className="flex items-center gap-2">
             {Object.keys(timeframes).map((period) => (
               <button
