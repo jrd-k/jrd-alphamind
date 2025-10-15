@@ -75,6 +75,7 @@ export const BotControls = () => {
               max={5}
               step={0.5}
               className="w-full"
+              aria-label={`Risk per trade: ${riskLevel[0]}%`}
             />
             <p className="text-xs text-muted-foreground">Recommended: 1-2%</p>
           </div>
@@ -91,6 +92,7 @@ export const BotControls = () => {
               min={1}
               step={1}
               className="w-full"
+              aria-label={`Maximum layers per pair: ${maxLayers[0]}`}
             />
           </div>
         </div>
