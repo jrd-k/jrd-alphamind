@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/Sidebar";
 import Index from "./pages/Index";
 import LiveMonitor from "./pages/LiveMonitor";
 import Analytics from "./pages/Analytics";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/live" element={<LiveMonitor />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/install" element={<Install />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
