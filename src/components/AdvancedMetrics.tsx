@@ -84,6 +84,7 @@ export const AdvancedMetrics = () => {
                 <Progress 
                   value={(metric.value / metric.target) * 100} 
                   className="h-2"
+                  aria-label={`${metric.name} progress: ${metric.value} of ${metric.target} target`}
                 />
               </div>
             </div>

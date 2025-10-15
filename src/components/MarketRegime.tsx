@@ -33,7 +33,7 @@ export const MarketRegime = () => {
               <span className="text-sm text-muted-foreground">AI Confidence</span>
               <span className="text-sm font-medium text-foreground">{regime.confidence}%</span>
             </div>
-            <Progress value={regime.confidence} className="h-2" />
+            <Progress value={regime.confidence} className="h-2" aria-label={`AI confidence level: ${regime.confidence}%`} />
           </div>
           
           <div className="flex items-center justify-between">

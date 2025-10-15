@@ -35,6 +35,7 @@ export const AIIndicators = () => {
                 <Progress 
                   value={indicator.confidence} 
                   className="h-1.5"
+                  aria-label={`${indicator.name} confidence level: ${indicator.confidence}%`}
                 />
               </div>
             </div>

@@ -19,7 +19,7 @@ export const RiskMetrics = () => {
               <span className="text-sm text-muted-foreground">Current Exposure</span>
               <span className="text-sm font-medium text-foreground">{metrics.accountRisk}%</span>
             </div>
-            <Progress value={(metrics.accountRisk / metrics.exposureLimit) * 100} className="h-2" />
+            <Progress value={(metrics.accountRisk / metrics.exposureLimit) * 100} className="h-2" aria-label={`Current exposure: ${metrics.accountRisk}% of ${metrics.exposureLimit}% limit`} />
             <p className="text-xs text-muted-foreground">Limit: {metrics.exposureLimit}%</p>
           </div>
 
@@ -28,7 +28,7 @@ export const RiskMetrics = () => {
               <span className="text-sm text-muted-foreground">Daily Risk Used</span>
               <span className="text-sm font-medium text-foreground">{metrics.dailyRisk}%</span>
             </div>
-            <Progress value={(metrics.dailyRisk / 3) * 100} className="h-2" />
+            <Progress value={(metrics.dailyRisk / 3) * 100} className="h-2" aria-label={`Daily risk used: ${metrics.dailyRisk}% of 3% daily cap`} />
             <p className="text-xs text-muted-foreground">Daily Cap: 3%</p>
           </div>
 
