@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
-        name: 'ROP IS KING',
-        short_name: 'ROP IS KING',
+        name: 'THE INSIDER',
+        short_name: 'THE INSIDER',
         description: 'Advanced AI-driven forex trading system with adaptive deep learning, real-time market analysis, and intelligent risk management',
         theme_color: '#0F172A',
         background_color: '#0F172A',

@@ -26,7 +26,7 @@ export const Sidebar = () => {
             <Activity className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="font-bold text-foreground">ROP IS KING</h2>
+            <h2 className="font-bold text-foreground">THE INSIDER</h2>
             <p className="text-xs text-muted-foreground">AI Trading System</p>
           </div>
         </div>
