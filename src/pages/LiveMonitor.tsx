@@ -1,5 +1,8 @@
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
+import { CandlestickChart } from "@/components/CandlestickChart";
+import { ChartControls } from "@/components/ChartControls";
+import { BrokerStatus } from "@/components/BrokerStatus";
 import { MarketRegime } from "@/components/MarketRegime";
 import { ActivePositions } from "@/components/ActivePositions";
 import { SignalFeed } from "@/components/SignalFeed";
@@ -77,6 +80,9 @@ const LiveMonitor = () => {
           />
         </div>
 
+        <ChartControls />
+        <CandlestickChart />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <ActivePositions />
@@ -84,6 +90,7 @@ const LiveMonitor = () => {
           </div>
 
           <div className="space-y-6">
+            <BrokerStatus />
             <BotControls />
             <MarketRegime />
             <AIIndicators />

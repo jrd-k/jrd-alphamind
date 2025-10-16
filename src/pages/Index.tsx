@@ -1,5 +1,8 @@
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
+import { CandlestickChart } from "@/components/CandlestickChart";
+import { ChartControls } from "@/components/ChartControls";
+import { BrokerStatus } from "@/components/BrokerStatus";
 import { PerformanceChart } from "@/components/PerformanceChart";
 import { ActivePositions } from "@/components/ActivePositions";
 import { SignalFeed } from "@/components/SignalFeed";
@@ -94,6 +97,8 @@ const Index = () => {
           />
         </div>
 
+        <ChartControls />
+        <CandlestickChart />
         <PerformanceChart />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -103,6 +108,7 @@ const Index = () => {
           </div>
 
           <div className="space-y-6">
+            <BrokerStatus />
             <BotControls />
             <MarketRegime />
             <AIIndicators />
