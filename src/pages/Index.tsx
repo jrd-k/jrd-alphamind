@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { StatCard } from "@/components/StatCard";
 import { CandlestickChart } from "@/components/CandlestickChart";
@@ -11,6 +12,7 @@ import { MarketRegime } from "@/components/MarketRegime";
 import { RiskMetrics } from "@/components/RiskMetrics";
 import { AIIndicators } from "@/components/AIIndicators";
 import { NewsFeed } from "@/components/NewsFeed";
+import { IndicatorPanel } from "@/components/IndicatorPanel";
 import { 
   TrendingUp, 
   Target, 
@@ -23,6 +25,21 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [indicators, setIndicators] = useState({
+    sma: false,
+    ema: false,
+    rsi: false,
+    macd: false,
+    bollinger: false,
+    stochastic: false,
+  });
+  const [smaPeriod, setSmaPeriod] = useState(50);
+  const [emaPeriod, setEmaPeriod] = useState(12);
+
+  const toggleIndicator = (indicator: keyof typeof indicators) => {
+    setIndicators(prev => ({ ...prev, [indicator]: !prev[indicator] }));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -97,8 +114,25 @@ const Index = () => {
           />
         </div>
 
-        <ChartControls />
-        <CandlestickChart />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 space-y-4">
+            <ChartControls />
+            <CandlestickChart 
+              indicators={indicators}
+              smaPeriod={smaPeriod}
+              emaPeriod={emaPeriod}
+            />
+          </div>
+          <IndicatorPanel
+            indicators={indicators}
+            onToggleIndicator={toggleIndicator}
+            smaPeriod={smaPeriod}
+            emaPeriod={emaPeriod}
+            onSMAPeriodChange={setSmaPeriod}
+            onEMAPeriodChange={setEmaPeriod}
+          />
+        </div>
+
         <PerformanceChart />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
