@@ -3,16 +3,16 @@ import { Card } from "@/components/ui/card";
 import { BROKER_CONFIGS } from "@/constants/trading";
 import { BrokerType } from "@/types/trading";
 import { MetaTraderConnect } from "./brokers/MetaTraderConnect";
-import { OandaConnect } from "./brokers/OandaConnect";
-import { IBConnect } from "./brokers/IBConnect";
+import { ExnessConnect } from "./brokers/ExnessConnect";
+import { JustMarketsConnect } from "./brokers/JustMarketsConnect";
 import { DemoConnect } from "./brokers/DemoConnect";
 
 export const BrokerSelection = () => {
   const [selectedBroker, setSelectedBroker] = useState<BrokerType | null>(null);
 
   if (selectedBroker === "metatrader") return <MetaTraderConnect />;
-  if (selectedBroker === "oanda") return <OandaConnect />;
-  if (selectedBroker === "ib") return <IBConnect />;
+  if (selectedBroker === "exness") return <ExnessConnect />;
+  if (selectedBroker === "justmarkets") return <JustMarketsConnect />;
   if (selectedBroker === "demo") return <DemoConnect />;
 
   return (

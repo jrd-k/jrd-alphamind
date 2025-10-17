@@ -1,6 +1,16 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { SafetySettings } from "@/types/trading";
+import { SafetySettings, Symbol } from "@/types/trading";
 import { DEFAULT_SAFETY_SETTINGS } from "@/constants/trading";
+import { executeTrade as executeTradeService } from "@/services/tradeExecutor";
+
+interface TradeParams {
+  symbol: Symbol;
+  type: "buy" | "sell";
+  volume: number;
+  lotSize?: number;
+  stopLoss?: number;
+  takeProfit?: number;
+}
 
 interface TradingContextType {
   safetySettings: SafetySettings;
@@ -9,6 +19,7 @@ interface TradingContextType {
   setIsTradingEnabled: (enabled: boolean) => void;
   emergencyStopActive: boolean;
   setEmergencyStopActive: (active: boolean) => void;
+  executeTrade: (params: TradeParams) => Promise<void>;
 }
 
 const TradingContext = createContext<TradingContextType | undefined>(undefined);
@@ -27,6 +38,22 @@ export function TradingProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("safetySettings", JSON.stringify(safetySettings));
   }, [safetySettings]);
 
+  const executeTrade = async (params: TradeParams) => {
+    if (emergencyStopActive) {
+      throw new Error("Emergency stop is active");
+    }
+    if (!isTradingEnabled) {
+      throw new Error("Trading is disabled");
+    }
+    await executeTradeService({
+      symbol: params.symbol,
+      type: params.type,
+      lotSize: params.volume,
+      stopLoss: params.stopLoss,
+      takeProfit: params.takeProfit,
+    });
+  };
+
   return (
     <TradingContext.Provider
       value={{
@@ -36,6 +63,7 @@ export function TradingProvider({ children }: { children: ReactNode }) {
         setIsTradingEnabled,
         emergencyStopActive,
         setEmergencyStopActive,
+        executeTrade,
       }}
     >
       {children}

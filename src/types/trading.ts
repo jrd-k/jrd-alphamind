@@ -19,7 +19,7 @@ export type TimeFrame = "1m" | "5m" | "15m" | "1h" | "4h" | "1D";
 
 export type Symbol = "EUR/USD" | "GBP/USD" | "USD/JPY" | "AUD/USD" | "USD/CHF" | "EUR/JPY" | "GBP/JPY" | "EUR/GBP";
 
-export type BrokerType = "metatrader" | "oanda" | "ib" | "demo";
+export type BrokerType = "metatrader" | "exness" | "justmarkets" | "demo";
 
 export interface BrokerConnection {
   id: string;
@@ -96,16 +96,17 @@ export interface MetaTraderCredentials {
   isDemo: boolean;
 }
 
-export interface OandaCredentials {
-  apiToken: string;
+export interface ExnessCredentials {
+  apiKey: string;
+  apiSecret: string;
   accountId: string;
-  environment: "practice" | "live";
+  isDemo: boolean;
 }
 
-export interface IBCredentials {
-  clientId: string;
-  username: string;
+export interface JustMarketsCredentials {
+  apiToken: string;
   accountId: string;
+  isDemo: boolean;
 }
 
 export interface DemoAccountConfig {

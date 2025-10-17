@@ -2,17 +2,25 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { useBroker } from "@/contexts/BrokerContext";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import { IBCredentials } from "@/types/trading";
 
-export const IBConnect = () => {
+interface ExnessCredentials {
+  apiKey: string;
+  apiSecret: string;
+  accountId: string;
+  isDemo: boolean;
+}
+
+export const ExnessConnect = () => {
   const { setConnection, setAccountInfo } = useBroker();
-  const [credentials, setCredentials] = useState<IBCredentials>({
-    clientId: "",
-    username: "",
+  const [credentials, setCredentials] = useState<ExnessCredentials>({
+    apiKey: "",
+    apiSecret: "",
     accountId: "",
+    isDemo: true,
   });
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,30 +29,31 @@ export const IBConnect = () => {
     setError(null);
     setIsConnecting(true);
 
-    if (!credentials.clientId || !credentials.username || !credentials.accountId) {
+    if (!credentials.apiKey || !credentials.apiSecret || !credentials.accountId) {
       setError("Please fill in all required fields");
       setIsConnecting(false);
       return;
     }
 
+    // Simulate connection
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     setConnection({
-      id: `ib_${Date.now()}`,
-      brokerType: "ib",
+      id: `exness_${Date.now()}`,
+      brokerType: "exness",
       accountId: credentials.accountId,
       isActive: true,
-      isDemo: false,
+      isDemo: credentials.isDemo,
       lastConnected: new Date(),
     });
 
     setAccountInfo({
-      balance: 25840.90,
-      equity: 26125.45,
-      margin: 2580.00,
-      freeMargin: 23545.45,
-      marginLevel: 1012.3,
-      profit: 284.55,
+      balance: credentials.isDemo ? 10000 : 5420.50,
+      equity: credentials.isDemo ? 10127.35 : 5547.85,
+      margin: 543.20,
+      freeMargin: credentials.isDemo ? 9584.15 : 5004.65,
+      marginLevel: 1864.5,
+      profit: 127.35,
     });
 
     setIsConnecting(false);
@@ -55,10 +64,18 @@ export const IBConnect = () => {
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">
-            Interactive Brokers Connection
+            Exness Connection
           </h3>
           <p className="text-sm text-muted-foreground">
-            Connect to Interactive Brokers. Requires TWS or IB Gateway running.
+            Connect your Exness account via API. Get your credentials from{" "}
+            <a
+              href="https://www.exness.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              exness.com
+            </a>
           </p>
         </div>
 
@@ -71,22 +88,24 @@ export const IBConnect = () => {
 
         <div className="space-y-3">
           <div>
-            <Label htmlFor="clientId">Client ID *</Label>
+            <Label htmlFor="apiKey">API Key *</Label>
             <Input
-              id="clientId"
-              placeholder="Enter client ID (usually 0)"
-              value={credentials.clientId}
-              onChange={(e) => setCredentials({ ...credentials, clientId: e.target.value })}
+              id="apiKey"
+              type="password"
+              placeholder="Enter your Exness API key"
+              value={credentials.apiKey}
+              onChange={(e) => setCredentials({ ...credentials, apiKey: e.target.value })}
             />
           </div>
 
           <div>
-            <Label htmlFor="username">Username *</Label>
+            <Label htmlFor="apiSecret">API Secret *</Label>
             <Input
-              id="username"
-              placeholder="IB username"
-              value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+              id="apiSecret"
+              type="password"
+              placeholder="Enter your API secret"
+              value={credentials.apiSecret}
+              onChange={(e) => setCredentials({ ...credentials, apiSecret: e.target.value })}
             />
           </div>
 
@@ -94,17 +113,20 @@ export const IBConnect = () => {
             <Label htmlFor="accountId">Account ID *</Label>
             <Input
               id="accountId"
-              placeholder="e.g., U1234567"
+              placeholder="e.g., 12345678"
               value={credentials.accountId}
               onChange={(e) => setCredentials({ ...credentials, accountId: e.target.value })}
             />
           </div>
-        </div>
 
-        <div className="p-3 bg-muted/50 rounded-md">
-          <p className="text-xs text-muted-foreground">
-            Note: Ensure TWS or IB Gateway is running with API connections enabled (port 7497 for paper trading, 7496 for live).
-          </p>
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
+            <Label htmlFor="isDemo">Demo Account</Label>
+            <Switch
+              id="isDemo"
+              checked={credentials.isDemo}
+              onCheckedChange={(checked) => setCredentials({ ...credentials, isDemo: checked })}
+            />
+          </div>
         </div>
 
         <Button
@@ -120,7 +142,7 @@ export const IBConnect = () => {
           ) : (
             <>
               <CheckCircle className="h-4 w-4 mr-2" />
-              Connect Interactive Brokers
+              Connect Exness
             </>
           )}
         </Button>

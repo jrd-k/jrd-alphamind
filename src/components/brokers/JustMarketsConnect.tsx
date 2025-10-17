@@ -2,18 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { useBroker } from "@/contexts/BrokerContext";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import { OandaCredentials } from "@/types/trading";
 
-export const OandaConnect = () => {
+interface JustMarketsCredentials {
+  apiToken: string;
+  accountId: string;
+  isDemo: boolean;
+}
+
+export const JustMarketsConnect = () => {
   const { setConnection, setAccountInfo } = useBroker();
-  const [credentials, setCredentials] = useState<OandaCredentials>({
+  const [credentials, setCredentials] = useState<JustMarketsCredentials>({
     apiToken: "",
     accountId: "",
-    environment: "practice",
+    isDemo: true,
   });
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,24 +33,25 @@ export const OandaConnect = () => {
       return;
     }
 
+    // Simulate connection
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     setConnection({
-      id: `oanda_${Date.now()}`,
-      brokerType: "oanda",
+      id: `justmarkets_${Date.now()}`,
+      brokerType: "justmarkets",
       accountId: credentials.accountId,
       isActive: true,
-      isDemo: credentials.environment === "practice",
+      isDemo: credentials.isDemo,
       lastConnected: new Date(),
     });
 
     setAccountInfo({
-      balance: credentials.environment === "practice" ? 100000 : 12420.75,
-      equity: credentials.environment === "practice" ? 100234.50 : 12654.25,
-      margin: 1250.00,
-      freeMargin: credentials.environment === "practice" ? 98984.50 : 11404.25,
-      marginLevel: 8018.8,
-      profit: 234.50,
+      balance: credentials.isDemo ? 10000 : 5420.50,
+      equity: credentials.isDemo ? 10127.35 : 5547.85,
+      margin: 543.20,
+      freeMargin: credentials.isDemo ? 9584.15 : 5004.65,
+      marginLevel: 1864.5,
+      profit: 127.35,
     });
 
     setIsConnecting(false);
@@ -56,17 +62,17 @@ export const OandaConnect = () => {
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">
-            OANDA Connection
+            JustMarkets Connection
           </h3>
           <p className="text-sm text-muted-foreground">
-            Connect your OANDA account. Get API token from{" "}
+            Connect your JustMarkets account via API. Get your token from{" "}
             <a
-              href="https://www.oanda.com/account/tpa/personal_token"
+              href="https://justmarkets.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              OANDA settings
+              justmarkets.com
             </a>
           </p>
         </div>
@@ -84,7 +90,7 @@ export const OandaConnect = () => {
             <Input
               id="apiToken"
               type="password"
-              placeholder="Enter your OANDA API token"
+              placeholder="Enter your JustMarkets API token"
               value={credentials.apiToken}
               onChange={(e) => setCredentials({ ...credentials, apiToken: e.target.value })}
             />
@@ -94,28 +100,19 @@ export const OandaConnect = () => {
             <Label htmlFor="accountId">Account ID *</Label>
             <Input
               id="accountId"
-              placeholder="e.g., 001-004-1234567-001"
+              placeholder="e.g., 12345678"
               value={credentials.accountId}
               onChange={(e) => setCredentials({ ...credentials, accountId: e.target.value })}
             />
           </div>
 
-          <div>
-            <Label htmlFor="environment">Environment</Label>
-            <Select
-              value={credentials.environment}
-              onValueChange={(value: "practice" | "live") =>
-                setCredentials({ ...credentials, environment: value })
-              }
-            >
-              <SelectTrigger id="environment">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="practice">Practice (Demo)</SelectItem>
-                <SelectItem value="live">Live Trading</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
+            <Label htmlFor="isDemo">Demo Account</Label>
+            <Switch
+              id="isDemo"
+              checked={credentials.isDemo}
+              onCheckedChange={(checked) => setCredentials({ ...credentials, isDemo: checked })}
+            />
           </div>
         </div>
 
@@ -132,7 +129,7 @@ export const OandaConnect = () => {
           ) : (
             <>
               <CheckCircle className="h-4 w-4 mr-2" />
-              Connect OANDA
+              Connect JustMarkets
             </>
           )}
         </Button>

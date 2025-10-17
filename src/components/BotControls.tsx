@@ -4,14 +4,30 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, RotateCcw, Settings2, AlertTriangle } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Play, Pause, RotateCcw, Settings2, AlertTriangle, Zap } from "lucide-react";
 import { useState } from "react";
+import { useBroker } from "@/contexts/BrokerContext";
+import { useTrading } from "@/contexts/TradingContext";
+import { toast } from "sonner";
 
 export const BotControls = () => {
+  const { connection } = useBroker();
+  const { isTradingEnabled, setIsTradingEnabled } = useTrading();
   const [isRunning, setIsRunning] = useState(true);
-  const [autoTrade, setAutoTrade] = useState(true);
   const [riskLevel, setRiskLevel] = useState([2]);
   const [maxLayers, setMaxLayers] = useState([6]);
+
+  const handleAutoTradeToggle = (checked: boolean) => {
+    if (checked && !connection?.isActive) {
+      toast.error("Connect a broker first");
+      return;
+    }
+    if (checked) {
+      toast.success("Auto-execute enabled - trades will execute automatically");
+    }
+    setIsTradingEnabled(checked);
+  };
 
   return (
     <Card className="p-6 bg-card border-border shadow-card hover:border-primary/30 transition-all duration-300">
@@ -59,13 +75,51 @@ export const BotControls = () => {
         </div>
 
         <div className="space-y-4 pt-4 border-t border-border">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label className="text-foreground">Auto Trading</Label>
-              <p className="text-xs text-muted-foreground">Enable automatic trade execution</p>
-            </div>
-            <Switch checked={autoTrade} onCheckedChange={setAutoTrade} />
-          </div>
+          {connection?.isActive && (
+            <AlertDialog>
+              <div className="flex items-center justify-between p-3 bg-primary/5 border border-primary/20 rounded-md">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-primary" />
+                    <Label className="text-foreground font-semibold">Auto-Execute Trades</Label>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {isTradingEnabled ? "Bot will execute trades automatically" : "Manual confirmation required"}
+                  </p>
+                </div>
+                {isTradingEnabled ? (
+                  <Switch checked={isTradingEnabled} onCheckedChange={handleAutoTradeToggle} />
+                ) : (
+                  <AlertDialogTrigger asChild>
+                    <Switch checked={false} onCheckedChange={() => {}} />
+                  </AlertDialogTrigger>
+                )}
+              </div>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Enable Auto-Trading?</AlertDialogTitle>
+                  <AlertDialogDescription className="space-y-3">
+                    <p>When enabled, the bot will automatically execute trades on your {connection.isDemo ? "demo" : "live"} account.</p>
+                    <div className="space-y-2 text-sm">
+                      <p className="font-semibold text-foreground">Safety Checklist:</p>
+                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                        <li>Safety limits are configured</li>
+                        <li>Risk per trade is set appropriately</li>
+                        <li>You understand trades execute automatically</li>
+                        {!connection.isDemo && <li className="text-amber-600">⚠️ Trading with REAL money</li>}
+                      </ul>
+                    </div>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => handleAutoTradeToggle(true)}>
+                    Enable Auto-Trading
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">

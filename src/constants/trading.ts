@@ -44,17 +44,17 @@ export const BROKER_CONFIGS = {
     features: ["Expert Advisors", "Custom Indicators", "Automated Trading"],
     difficulty: "Intermediate",
   },
-  oanda: {
-    name: "OANDA",
-    description: "Direct REST API integration",
-    features: ["Low Spreads", "Advanced Charting", "Risk Management"],
+  exness: {
+    name: "Exness",
+    description: "Low spreads & instant execution",
+    features: ["Tight Spreads", "Fast Execution", "Multiple Account Types"],
     difficulty: "Easy",
   },
-  ib: {
-    name: "Interactive Brokers",
-    description: "For stocks, options & forex",
-    features: ["Multi-Asset", "Low Fees", "Advanced Orders"],
-    difficulty: "Advanced",
+  justmarkets: {
+    name: "JustMarkets",
+    description: "Reliable forex & CFD broker",
+    features: ["No Requotes", "Competitive Spreads", "24/7 Support"],
+    difficulty: "Easy",
   },
   demo: {
     name: "Demo Account",
