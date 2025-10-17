@@ -1,44 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { createChart, IChartApi, ISeriesApi, LineStyle, CandlestickSeriesPartialOptions, HistogramSeriesPartialOptions } from "lightweight-charts";
+import { createChart, IChartApi, CandlestickSeries, HistogramSeries } from "lightweight-charts";
 import { Card } from "@/components/ui/card";
 import { useChart } from "@/contexts/ChartContext";
 import { generateHistoricalData, updateCurrentCandle, generateNextCandle } from "@/services/marketData";
 import { convertToHeikinAshi } from "@/lib/heikinAshi";
-import { 
-  calculateSMA, 
-  calculateEMA, 
-  calculateRSI, 
-  calculateMACD, 
-  calculateBollingerBands,
-  calculateStochastic 
-} from "@/lib/indicators";
 import { CandlestickData } from "@/types/trading";
 
-interface IndicatorState {
-  sma: boolean;
-  ema: boolean;
-  rsi: boolean;
-  macd: boolean;
-  bollinger: boolean;
-  stochastic: boolean;
-}
-
-interface CandlestickChartProps {
-  indicators?: IndicatorState;
-  smaPeriod?: number;
-  emaPeriod?: number;
-}
-
-export const CandlestickChart = ({ 
-  indicators = { sma: false, ema: false, rsi: false, macd: false, bollinger: false, stochastic: false },
-  smaPeriod = 50,
-  emaPeriod = 12,
-}: CandlestickChartProps) => {
+export const CandlestickChart = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candlestickSeriesRef = useRef<any>(null);
   const volumeSeriesRef = useRef<any>(null);
-  const indicatorSeriesRef = useRef<Map<string, any>>(new Map());
   
   const { selectedSymbol, selectedTimeframe, chartType, isRealTimeEnabled } = useChart();
   const [chartData, setChartData] = useState<CandlestickData[]>([]);
@@ -53,11 +25,11 @@ export const CandlestickChart = ({
         textColor: "#9CA3AF",
       },
       grid: {
-        vertLines: { color: "#1F2937", style: LineStyle.Solid },
-        horzLines: { color: "#1F2937", style: LineStyle.Solid },
+        vertLines: { color: "#1F2937" },
+        horzLines: { color: "#1F2937" },
       },
       width: chartContainerRef.current.clientWidth,
-      height: 600,
+      height: 500,
       timeScale: {
         timeVisible: true,
         secondsVisible: false,
@@ -65,33 +37,21 @@ export const CandlestickChart = ({
       },
       rightPriceScale: {
         borderColor: "#374151",
-        scaleMargins: {
-          top: 0.1,
-          bottom: 0.2,
-        },
-      },
-      leftPriceScale: {
-        visible: true,
-        borderColor: "#374151",
       },
       crosshair: {
-        mode: 1 as any,
+        mode: 1,
         vertLine: {
-          color: "#00D4FF",
-          width: 1,
-          style: LineStyle.Dashed,
-          labelBackgroundColor: "#00D4FF",
+          color: "#6366F1",
+          labelBackgroundColor: "#6366F1",
         },
         horzLine: {
-          color: "#00D4FF",
-          width: 1,
-          style: LineStyle.Dashed,
-          labelBackgroundColor: "#00D4FF",
+          color: "#6366F1",
+          labelBackgroundColor: "#6366F1",
         },
       },
     });
 
-    const candlestickSeries = (chart as any).addCandlestickSeries({
+    const candlestickSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#10B981",
       downColor: "#EF4444",
       borderUpColor: "#10B981",
@@ -100,8 +60,8 @@ export const CandlestickChart = ({
       wickDownColor: "#EF4444",
     });
 
-    const volumeSeries = (chart as any).addHistogramSeries({
-      color: "#00D4FF",
+    const volumeSeries = chart.addSeries(HistogramSeries, {
+      color: "#6366F1",
       priceFormat: {
         type: "volume",
       },
@@ -110,7 +70,7 @@ export const CandlestickChart = ({
 
     chart.priceScale("").applyOptions({
       scaleMargins: {
-        top: 0.7,
+        top: 0.8,
         bottom: 0,
       },
     });
@@ -132,8 +92,6 @@ export const CandlestickChart = ({
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      indicatorSeriesRef.current.forEach(series => chart.removeSeries(series));
-      indicatorSeriesRef.current.clear();
       chart.remove();
     };
   }, []);
@@ -143,77 +101,6 @@ export const CandlestickChart = ({
     const data = generateHistoricalData(selectedSymbol, selectedTimeframe, 200);
     setChartData(data);
   }, [selectedSymbol, selectedTimeframe]);
-
-  // Update indicators
-  useEffect(() => {
-    if (!chartRef.current || chartData.length < 50) return;
-
-    // Clear existing indicators
-    indicatorSeriesRef.current.forEach(series => {
-      try {
-        chartRef.current?.removeSeries(series);
-      } catch (e) {
-        // Series might already be removed
-      }
-    });
-    indicatorSeriesRef.current.clear();
-
-    // Add SMA
-    if (indicators.sma) {
-      const smaData = calculateSMA(chartData, smaPeriod);
-      const smaSeries = (chartRef.current as any).addLineSeries({
-        color: "#FFD700",
-        lineWidth: 2,
-        title: `SMA ${smaPeriod}`,
-      });
-      smaSeries.setData(smaData as any);
-      indicatorSeriesRef.current.set('sma', smaSeries);
-    }
-
-    // Add EMA
-    if (indicators.ema) {
-      const emaData = calculateEMA(chartData, emaPeriod);
-      const emaSeries = (chartRef.current as any).addLineSeries({
-        color: "#FF6B6B",
-        lineWidth: 2,
-        title: `EMA ${emaPeriod}`,
-      });
-      emaSeries.setData(emaData as any);
-      indicatorSeriesRef.current.set('ema', emaSeries);
-    }
-
-    // Add Bollinger Bands
-    if (indicators.bollinger) {
-      const bbData = calculateBollingerBands(chartData, 20, 2);
-      
-      const upperSeries = (chartRef.current as any).addLineSeries({
-        color: "#9C27B0",
-        lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
-        title: "BB Upper",
-      });
-      upperSeries.setData(bbData.upper as any);
-      indicatorSeriesRef.current.set('bb-upper', upperSeries);
-
-      const middleSeries = (chartRef.current as any).addLineSeries({
-        color: "#9C27B0",
-        lineWidth: 1,
-        title: "BB Middle",
-      });
-      middleSeries.setData(bbData.middle as any);
-      indicatorSeriesRef.current.set('bb-middle', middleSeries);
-
-      const lowerSeries = (chartRef.current as any).addLineSeries({
-        color: "#9C27B0",
-        lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
-        title: "BB Lower",
-      });
-      lowerSeries.setData(bbData.lower as any);
-      indicatorSeriesRef.current.set('bb-lower', lowerSeries);
-    }
-
-  }, [chartData, indicators, smaPeriod, emaPeriod]);
 
   // Update chart with data
   useEffect(() => {
@@ -253,7 +140,7 @@ export const CandlestickChart = ({
         if (prev.length === 0) return prev;
         
         const lastCandle = prev[prev.length - 1];
-        const shouldCreateNewCandle = Math.random() > 0.7;
+        const shouldCreateNewCandle = Math.random() > 0.7; // 30% chance of new candle
 
         if (shouldCreateNewCandle) {
           const newCandle = generateNextCandle(selectedSymbol, lastCandle, selectedTimeframe);
@@ -263,38 +150,32 @@ export const CandlestickChart = ({
           return [...prev.slice(0, -1), updatedCandle];
         }
       });
-    }, 2000);
+    }, 2000); // Update every 2 seconds
 
     return () => clearInterval(interval);
   }, [isRealTimeEnabled, chartData.length, selectedSymbol, selectedTimeframe]);
 
   return (
-    <Card className="p-6 border-border/50 bg-card/50 backdrop-blur">
+    <Card className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-            {selectedSymbol}
-            <span className="text-sm font-normal text-muted-foreground">• {selectedTimeframe}</span>
+          <h3 className="text-lg font-semibold text-foreground">
+            {selectedSymbol} - {selectedTimeframe}
           </h3>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground">
             {chartType === "heikinashi" ? "Heikin Ashi" : "Candlestick"} Chart
-            {Object.values(indicators).some(Boolean) && (
-              <span className="ml-2">
-                • {Object.values(indicators).filter(Boolean).length} indicators active
-              </span>
-            )}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {isRealTimeEnabled && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-bullish/10 border border-bullish/20">
+            <div className="flex items-center gap-2">
               <div className="h-2 w-2 bg-bullish rounded-full animate-pulse" />
-              <span className="text-xs font-medium text-bullish">Live Data</span>
+              <span className="text-xs text-muted-foreground">Live</span>
             </div>
           )}
         </div>
       </div>
-      <div ref={chartContainerRef} className="w-full rounded-lg overflow-hidden" />
+      <div ref={chartContainerRef} className="w-full" />
     </Card>
   );
 };
