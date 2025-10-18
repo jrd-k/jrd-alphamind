@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { createChart, IChartApi, LineStyle } from "lightweight-charts";
+import * as LightweightCharts from "lightweight-charts";
+import type { IChartApi } from "lightweight-charts";
 import { Card } from "@/components/ui/card";
 import { CandlestickData } from "@/types/trading";
 import { calculateRSI, calculateMACD, calculateStochastic, calculateATR } from "@/lib/indicators";
@@ -17,14 +18,14 @@ export const IndicatorChart = ({ data, type, title }: IndicatorChartProps) => {
   useEffect(() => {
     if (!chartContainerRef.current || data.length < 50) return;
 
-    const chart = createChart(chartContainerRef.current, {
+    const chart = LightweightCharts.createChart(chartContainerRef.current, {
       layout: {
         background: { color: "transparent" },
         textColor: "#9CA3AF",
       },
       grid: {
-        vertLines: { color: "#1F2937", style: LineStyle.Solid },
-        horzLines: { color: "#1F2937", style: LineStyle.Solid },
+        vertLines: { color: "#1F2937", style: LightweightCharts.LineStyle.Solid },
+        horzLines: { color: "#1F2937", style: LightweightCharts.LineStyle.Solid },
       },
       width: chartContainerRef.current.clientWidth,
       height: 200,
@@ -50,14 +51,14 @@ export const IndicatorChart = ({ data, type, title }: IndicatorChartProps) => {
       const overboughtSeries = (chart as any).addLineSeries({
         color: "#EF4444",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
       });
       overboughtSeries.setData(rsiData.map(d => ({ time: d.time, value: 70 })) as any);
 
       const oversoldSeries = (chart as any).addLineSeries({
         color: "#10B981",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
       });
       oversoldSeries.setData(rsiData.map(d => ({ time: d.time, value: 30 })) as any);
     } else if (type === "macd") {
@@ -100,14 +101,14 @@ export const IndicatorChart = ({ data, type, title }: IndicatorChartProps) => {
       const overboughtSeries = (chart as any).addLineSeries({
         color: "#EF4444",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
       });
       overboughtSeries.setData(stochData.k.map(d => ({ time: d.time, value: 80 })) as any);
 
       const oversoldSeries = (chart as any).addLineSeries({
         color: "#10B981",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
       });
       oversoldSeries.setData(stochData.k.map(d => ({ time: d.time, value: 20 })) as any);
     } else if (type === "atr") {

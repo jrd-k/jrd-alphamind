@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { createChart, IChartApi, ISeriesApi, LineStyle, CandlestickSeriesPartialOptions, HistogramSeriesPartialOptions } from "lightweight-charts";
+import * as LightweightCharts from "lightweight-charts";
+import type { IChartApi } from "lightweight-charts";
 import { Card } from "@/components/ui/card";
 import { useChart } from "@/contexts/ChartContext";
 import { generateHistoricalData, updateCurrentCandle, generateNextCandle } from "@/services/marketData";
@@ -47,14 +48,14 @@ export const CandlestickChart = ({
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    const chart = createChart(chartContainerRef.current, {
+    const chart = LightweightCharts.createChart(chartContainerRef.current, {
       layout: {
         background: { color: "transparent" },
         textColor: "#9CA3AF",
       },
       grid: {
-        vertLines: { color: "#1F2937", style: LineStyle.Solid },
-        horzLines: { color: "#1F2937", style: LineStyle.Solid },
+        vertLines: { color: "#1F2937", style: LightweightCharts.LineStyle.Solid },
+        horzLines: { color: "#1F2937", style: LightweightCharts.LineStyle.Solid },
       },
       width: chartContainerRef.current.clientWidth,
       height: 600,
@@ -79,34 +80,44 @@ export const CandlestickChart = ({
         vertLine: {
           color: "#00D4FF",
           width: 1,
-          style: LineStyle.Dashed,
+          style: LightweightCharts.LineStyle.Dashed,
           labelBackgroundColor: "#00D4FF",
         },
         horzLine: {
           color: "#00D4FF",
           width: 1,
-          style: LineStyle.Dashed,
+          style: LightweightCharts.LineStyle.Dashed,
           labelBackgroundColor: "#00D4FF",
         },
       },
     });
 
-    const candlestickSeries = (chart as any).addCandlestickSeries({
-      upColor: "#10B981",
-      downColor: "#EF4444",
-      borderUpColor: "#10B981",
-      borderDownColor: "#EF4444",
-      wickUpColor: "#10B981",
-      wickDownColor: "#EF4444",
-    });
+    const candlestickSeries = (chart as any).addCandlestickSeries
+      ? (chart as any).addCandlestickSeries({
+          upColor: "#10B981",
+          downColor: "#EF4444",
+          borderUpColor: "#10B981",
+          borderDownColor: "#EF4444",
+          wickUpColor: "#10B981",
+          wickDownColor: "#EF4444",
+        })
+      : (chart as any).addLineSeries({
+          color: "#10B981",
+          lineWidth: 2,
+        });
 
-    const volumeSeries = (chart as any).addHistogramSeries({
-      color: "#00D4FF",
-      priceFormat: {
-        type: "volume",
-      },
-      priceScaleId: "",
-    });
+    const volumeSeries = (chart as any).addHistogramSeries
+      ? (chart as any).addHistogramSeries({
+          color: "#00D4FF",
+          priceFormat: {
+            type: "volume",
+          },
+          priceScaleId: "",
+        })
+      : (chart as any).addLineSeries({
+          color: "#00D4FF",
+          lineWidth: 1,
+        });
 
     chart.priceScale("").applyOptions({
       scaleMargins: {
@@ -189,7 +200,7 @@ export const CandlestickChart = ({
       const upperSeries = (chartRef.current as any).addLineSeries({
         color: "#9C27B0",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
         title: "BB Upper",
       });
       upperSeries.setData(bbData.upper as any);
@@ -206,7 +217,7 @@ export const CandlestickChart = ({
       const lowerSeries = (chartRef.current as any).addLineSeries({
         color: "#9C27B0",
         lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
         title: "BB Lower",
       });
       lowerSeries.setData(bbData.lower as any);
