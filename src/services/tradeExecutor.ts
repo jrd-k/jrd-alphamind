@@ -1,6 +1,5 @@
 import { Symbol, Trade, Position } from "@/types/trading";
 import { getCurrentPrice } from "./marketData";
-import { saveTradeToJournal } from "./tradeJournal";
 
 export interface TradeParams {
   symbol: Symbol;
@@ -146,21 +145,6 @@ export async function executeTrade(params: TradeParams): Promise<Trade> {
     openTime: new Date(),
     status: "open",
   };
-
-  // Log to trade journal
-  saveTradeToJournal({
-    id: trade.id,
-    date: new Date().toLocaleString(),
-    timestamp: Date.now(),
-    symbol: params.symbol,
-    type: params.type,
-    entryPrice: currentPrice,
-    lotSize: params.lotSize,
-    stopLoss: params.stopLoss,
-    takeProfit: params.takeProfit,
-    layers: 1,
-    status: "open",
-  });
 
   // In production, this would call Supabase edge function
   // Example: await supabase.functions.invoke('execute-trade', { body: params })

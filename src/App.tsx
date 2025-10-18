@@ -11,7 +11,6 @@ import Index from "./pages/Index";
 import LiveMonitor from "./pages/LiveMonitor";
 import Analytics from "./pages/Analytics";
 import BrokerConnect from "./pages/BrokerConnect";
-import Journal from "./pages/Journal";
 import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
@@ -30,13 +29,12 @@ const App = () => (
                 <Sidebar />
                 <div className="flex-1">
                   <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/live" element={<LiveMonitor />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/journal" element={<Journal />} />
-              <Route path="/broker-connect" element={<BrokerConnect />} />
-              <Route path="/install" element={<Install />} />
-              <Route path="*" element={<NotFound />} />
+                    <Route path="/" element={<Index />} />
+                    <Route path="/live" element={<LiveMonitor />} />
+                    <Route path="/analytics" element={<Analytics />} />
+                    <Route path="/broker-connect" element={<BrokerConnect />} />
+                    <Route path="/install" element={<Install />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
               </div>

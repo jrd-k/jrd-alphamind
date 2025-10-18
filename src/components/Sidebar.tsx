@@ -12,7 +12,6 @@ const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Live Monitor", url: "/live", icon: Activity },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Trade Journal", url: "/journal", icon: BookOpen },
   { title: "Broker Connect", url: "/broker-connect", icon: Settings },
 ];
 
