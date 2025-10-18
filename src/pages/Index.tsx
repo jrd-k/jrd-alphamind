@@ -15,6 +15,8 @@ import { NewsFeed } from "@/components/NewsFeed";
 import { IndicatorPanel } from "@/components/IndicatorPanel";
 import { IndicatorChart } from "@/components/IndicatorChart";
 import { useChart } from "@/contexts/ChartContext";
+import { useEffect } from "react";
+import { generateHistoricalData } from "@/services/marketData";
 import { 
   TrendingUp, 
   Target, 
@@ -27,6 +29,7 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const { selectedSymbol, selectedTimeframe } = useChart();
   const [indicators, setIndicators] = useState({
     sma: false,
     ema: false,
@@ -38,6 +41,11 @@ const Index = () => {
   const [smaPeriod, setSmaPeriod] = useState(50);
   const [emaPeriod, setEmaPeriod] = useState(12);
   const [chartData, setChartData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const data = generateHistoricalData(selectedSymbol, selectedTimeframe, 200);
+    setChartData(data);
+  }, [selectedSymbol, selectedTimeframe]);
 
   const toggleIndicator = (indicator: keyof typeof indicators) => {
     setIndicators(prev => ({ ...prev, [indicator]: !prev[indicator] }));
