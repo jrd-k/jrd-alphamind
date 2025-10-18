@@ -13,6 +13,8 @@ import { RiskMetrics } from "@/components/RiskMetrics";
 import { AIIndicators } from "@/components/AIIndicators";
 import { NewsFeed } from "@/components/NewsFeed";
 import { IndicatorPanel } from "@/components/IndicatorPanel";
+import { IndicatorChart } from "@/components/IndicatorChart";
+import { useChart } from "@/contexts/ChartContext";
 import { 
   TrendingUp, 
   Target, 
@@ -35,6 +37,7 @@ const Index = () => {
   });
   const [smaPeriod, setSmaPeriod] = useState(50);
   const [emaPeriod, setEmaPeriod] = useState(12);
+  const [chartData, setChartData] = useState<any[]>([]);
 
   const toggleIndicator = (indicator: keyof typeof indicators) => {
     setIndicators(prev => ({ ...prev, [indicator]: !prev[indicator] }));
@@ -122,6 +125,19 @@ const Index = () => {
               smaPeriod={smaPeriod}
               emaPeriod={emaPeriod}
             />
+            
+            {/* Separate Indicator Charts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {indicators.rsi && chartData.length > 50 && (
+                <IndicatorChart data={chartData} type="rsi" title="RSI (14)" />
+              )}
+              {indicators.macd && chartData.length > 50 && (
+                <IndicatorChart data={chartData} type="macd" title="MACD (12, 26, 9)" />
+              )}
+              {indicators.stochastic && chartData.length > 50 && (
+                <IndicatorChart data={chartData} type="stochastic" title="Stochastic (14, 3, 3)" />
+              )}
+            </div>
           </div>
           <IndicatorPanel
             indicators={indicators}

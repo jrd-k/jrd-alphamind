@@ -3,113 +3,101 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Download, Upload, Search, Filter } from "lucide-react";
-import { useState } from "react";
-
-const historyData = [
-  {
-    id: "TR001",
-    date: "2025-10-13 14:23",
-    pair: "EUR/USD",
-    type: "BUY",
-    entry: 1.0745,
-    exit: 1.0772,
-    pips: 27,
-    pl: 270,
-    plPercent: 2.5,
-    layers: 3,
-    duration: "4h 12m",
-    strategy: "Power Hour Breakout",
-  },
-  {
-    id: "TR002",
-    date: "2025-10-13 09:45",
-    pair: "GBP/JPY",
-    type: "SELL",
-    entry: 186.54,
-    exit: 186.21,
-    pips: 33,
-    pl: 165,
-    plPercent: 1.8,
-    layers: 2,
-    duration: "6h 34m",
-    strategy: "SuperTrend Swing",
-  },
-  {
-    id: "TR003",
-    date: "2025-10-12 16:20",
-    pair: "AUD/USD",
-    type: "BUY",
-    entry: 0.6512,
-    exit: 0.6498,
-    pips: -14,
-    pl: -70,
-    plPercent: -0.6,
-    layers: 1,
-    duration: "2h 18m",
-    strategy: "Intraday Scalp",
-  },
-  {
-    id: "TR004",
-    date: "2025-10-12 11:15",
-    pair: "USD/CHF",
-    type: "SELL",
-    entry: 0.8845,
-    exit: 0.8801,
-    pips: 44,
-    pl: 440,
-    plPercent: 4.2,
-    layers: 4,
-    duration: "8h 45m",
-    strategy: "Multi-Layer Swing",
-  },
-  {
-    id: "TR005",
-    date: "2025-10-11 13:30",
-    pair: "EUR/JPY",
-    type: "BUY",
-    entry: 158.32,
-    exit: 158.78,
-    pips: 46,
-    pl: 230,
-    plPercent: 2.1,
-    layers: 2,
-    duration: "12h 20m",
-    strategy: "Power Hour Breakout",
-  },
-];
+import { Download, Upload, Search, Filter, Trash2, FileText } from "lucide-react";
+import { useState, useEffect } from "react";
+import { getJournal, exportJournal, importJournal, deleteJournalEntry } from "@/services/tradeJournal";
+import { JournalEntry } from "@/types/trade-journal";
+import { useToast } from "@/hooks/use-toast";
 
 export const TradeHistory = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [filterStatus, setFilterStatus] = useState<"all" | "open" | "closed">("all");
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadJournal();
+  }, []);
+
+  const loadJournal = () => {
+    setJournalEntries(getJournal());
+  };
 
   const handleImport = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.csv,.json';
+    input.accept = '.json';
     input.onchange = (e: any) => {
       const file = e.target.files[0];
-      console.log('Importing file:', file.name);
-      // Handle file import logic
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as string;
+          if (importJournal(result)) {
+            loadJournal();
+            toast({
+              title: "Import Successful",
+              description: `Imported ${file.name}`,
+            });
+          } else {
+            toast({
+              title: "Import Failed",
+              description: "Invalid file format",
+              variant: "destructive",
+            });
+          }
+        };
+        reader.readAsText(file);
+      }
     };
     input.click();
   };
 
   const handleExport = () => {
-    console.log('Exporting trade history...');
-    // Handle export logic
+    const data = exportJournal();
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `trade-journal-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({
+      title: "Export Successful",
+      description: "Trade journal downloaded",
+    });
   };
+
+  const handleDelete = (id: string) => {
+    deleteJournalEntry(id);
+    loadJournal();
+    toast({
+      title: "Trade Deleted",
+      description: "Trade entry removed from journal",
+    });
+  };
+
+  const filteredEntries = journalEntries
+    .filter(entry => {
+      if (filterStatus !== "all" && entry.status !== filterStatus) return false;
+      if (searchTerm && !entry.symbol.toLowerCase().includes(searchTerm.toLowerCase()) && !entry.id.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+      return true;
+    })
+    .sort((a, b) => b.timestamp - a.timestamp);
 
   return (
     <Card className="p-6 bg-card border-border shadow-card">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Trade History</h3>
+          <div>
+            <h3 className="text-lg font-semibold text-foreground">Trade Journal</h3>
+            <p className="text-sm text-muted-foreground">{filteredEntries.length} entries</p>
+          </div>
           <div className="flex items-center gap-2">
             <Button 
               variant="outline" 
               size="sm"
               onClick={handleImport}
-              className="text-foreground border-border hover:bg-muted"
             >
               <Upload className="h-4 w-4 mr-2" />
               Import
@@ -118,7 +106,7 @@ export const TradeHistory = () => {
               variant="outline" 
               size="sm"
               onClick={handleExport}
-              className="text-foreground border-border hover:bg-muted"
+              disabled={journalEntries.length === 0}
             >
               <Download className="h-4 w-4 mr-2" />
               Export
@@ -130,78 +118,123 @@ export const TradeHistory = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search trades..."
+              placeholder="Search by symbol or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-input border-border text-foreground"
+              className="pl-10"
             />
           </div>
-          <Button variant="outline" size="sm" className="text-foreground border-border hover:bg-muted">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => {
+              const next = filterStatus === "all" ? "open" : filterStatus === "open" ? "closed" : "all";
+              setFilterStatus(next);
+            }}
+          >
             <Filter className="h-4 w-4 mr-2" />
-            Filter
+            {filterStatus === "all" ? "All" : filterStatus === "open" ? "Open" : "Closed"}
           </Button>
         </div>
         
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-muted-foreground">ID</TableHead>
-                <TableHead className="text-muted-foreground">Date</TableHead>
-                <TableHead className="text-muted-foreground">Pair</TableHead>
-                <TableHead className="text-muted-foreground">Type</TableHead>
-                <TableHead className="text-muted-foreground">Entry/Exit</TableHead>
-                <TableHead className="text-muted-foreground">Pips</TableHead>
-                <TableHead className="text-muted-foreground">P/L</TableHead>
-                <TableHead className="text-muted-foreground">Layers</TableHead>
-                <TableHead className="text-muted-foreground">Duration</TableHead>
-                <TableHead className="text-muted-foreground">Strategy</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {historyData.map((trade) => (
-                <TableRow key={trade.id} className="border-border hover:bg-muted/50">
-                  <TableCell className="font-mono text-sm text-muted-foreground">{trade.id}</TableCell>
-                  <TableCell className="text-sm text-foreground">{trade.date}</TableCell>
-                  <TableCell className="font-medium text-foreground">{trade.pair}</TableCell>
-                  <TableCell>
-                    <Badge 
-                      variant="outline" 
-                      className={trade.type === "BUY" 
-                        ? "bg-bullish/10 text-bullish border-bullish/20" 
-                        : "bg-bearish/10 text-bearish border-bearish/20"
-                      }
-                    >
-                      {trade.type}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-foreground">
-                    <div className="flex flex-col text-xs">
-                      <span>{trade.entry}</span>
-                      <span className="text-muted-foreground">→ {trade.exit}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className={trade.pips >= 0 ? "text-bullish font-medium" : "text-bearish font-medium"}>
-                    {trade.pips >= 0 ? "+" : ""}{trade.pips}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className={trade.pl >= 0 ? "text-bullish font-medium" : "text-bearish font-medium"}>
-                        ${trade.pl >= 0 ? "+" : ""}{trade.pl}
-                      </span>
-                      <span className={`text-xs ${trade.pl >= 0 ? "text-bullish/70" : "text-bearish/70"}`}>
-                        {trade.plPercent >= 0 ? "+" : ""}{trade.plPercent}%
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-foreground">{trade.layers}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{trade.duration}</TableCell>
-                  <TableCell className="text-sm text-foreground">{trade.strategy}</TableCell>
+        {filteredEntries.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <FileText className="h-12 w-12 text-muted-foreground/30 mb-3" />
+            <p className="text-muted-foreground">No trades in journal yet</p>
+            <p className="text-sm text-muted-foreground/70">Executed trades will appear here</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead className="text-muted-foreground">ID</TableHead>
+                  <TableHead className="text-muted-foreground">Date</TableHead>
+                  <TableHead className="text-muted-foreground">Symbol</TableHead>
+                  <TableHead className="text-muted-foreground">Type</TableHead>
+                  <TableHead className="text-muted-foreground">Entry/Exit</TableHead>
+                  <TableHead className="text-muted-foreground">Lot</TableHead>
+                  <TableHead className="text-muted-foreground">Pips</TableHead>
+                  <TableHead className="text-muted-foreground">P/L</TableHead>
+                  <TableHead className="text-muted-foreground">Status</TableHead>
+                  <TableHead className="text-muted-foreground">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {filteredEntries.map((entry) => (
+                  <TableRow key={entry.id} className="border-border hover:bg-muted/50">
+                    <TableCell className="font-mono text-xs text-muted-foreground">{entry.id.slice(0, 8)}</TableCell>
+                    <TableCell className="text-sm text-foreground">{entry.date}</TableCell>
+                    <TableCell className="font-medium text-foreground">{entry.symbol}</TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="outline" 
+                        className={entry.type === "buy" 
+                          ? "bg-bullish/10 text-bullish border-bullish/20" 
+                          : "bg-bearish/10 text-bearish border-bearish/20"
+                        }
+                      >
+                        {entry.type.toUpperCase()}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-foreground">
+                      <div className="flex flex-col text-xs">
+                        <span>{entry.entryPrice.toFixed(5)}</span>
+                        {entry.exitPrice && (
+                          <span className="text-muted-foreground">→ {entry.exitPrice.toFixed(5)}</span>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm text-foreground">{entry.lotSize}</TableCell>
+                    <TableCell className={entry.pips && entry.pips >= 0 ? "text-bullish font-medium" : "text-bearish font-medium"}>
+                      {entry.pips ? `${entry.pips >= 0 ? "+" : ""}${entry.pips.toFixed(1)}` : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {entry.profit !== undefined ? (
+                        <div className="flex flex-col">
+                          <span className={entry.profit >= 0 ? "text-bullish font-medium" : "text-bearish font-medium"}>
+                            ${entry.profit >= 0 ? "+" : ""}{entry.profit.toFixed(2)}
+                          </span>
+                          {entry.profitPercent !== undefined && (
+                            <span className={`text-xs ${entry.profit >= 0 ? "text-bullish/70" : "text-bearish/70"}`}>
+                              {entry.profitPercent >= 0 ? "+" : ""}{entry.profitPercent.toFixed(2)}%
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="outline"
+                        className={
+                          entry.status === "open" 
+                            ? "bg-primary/10 text-primary border-primary/20"
+                            : entry.status === "closed"
+                            ? "bg-muted text-muted-foreground border-muted-foreground/20"
+                            : "bg-destructive/10 text-destructive border-destructive/20"
+                        }
+                      >
+                        {entry.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(entry.id)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
     </Card>
   );
