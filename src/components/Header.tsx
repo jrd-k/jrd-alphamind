@@ -1,0 +1,39 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Activity, Settings } from "lucide-react";
+import { SymbolManager } from "@/components/SymbolManager";
+
+export const Header = () => {
+  return (
+    <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-gradient-primary rounded-lg shadow-glow">
+              <Activity className="h-6 w-6 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">JRD-TRADES</h1>
+              <p className="text-xs text-muted-foreground">AI Forex Trading System</p>
+            </div>
+          </div>
+          <Badge variant="outline" className="bg-bullish/10 text-bullish border-bullish/20">
+            <div className="h-2 w-2 bg-bullish rounded-full mr-2 animate-pulse" />
+            Live
+          </Badge>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <SymbolManager />
+          <div className="text-right border-l border-border pl-3">
+            <p className="text-sm font-semibold text-foreground">$10,720</p>
+            <p className="text-xs text-bullish">+7.2%</p>
+          </div>
+          <Button variant="ghost" size="icon">
+            <Settings className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
+};
