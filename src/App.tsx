@@ -12,6 +12,7 @@ import LiveMonitor from "./pages/LiveMonitor";
 import Analytics from "./pages/Analytics";
 import BrokerConnect from "./pages/BrokerConnect";
 import Install from "./pages/Install";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,19 +26,24 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <div className="flex min-h-screen w-full">
-                <Sidebar />
-                <div className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/live" element={<LiveMonitor />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/broker-connect" element={<BrokerConnect />} />
-                    <Route path="/install" element={<Install />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </div>
-              </div>
+              <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="*" element={
+                  <div className="flex min-h-screen w-full">
+                    <Sidebar />
+                    <div className="flex-1">
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/live" element={<LiveMonitor />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                        <Route path="/broker-connect" element={<BrokerConnect />} />
+                        <Route path="/install" element={<Install />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </div>
+                  </div>
+                } />
+              </Routes>
             </BrowserRouter>
           </TradingProvider>
         </BrokerProvider>
