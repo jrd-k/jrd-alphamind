@@ -31,7 +31,7 @@ const App = () => (
                 <Route path="*" element={
                   <div className="flex min-h-screen w-full">
                     <Sidebar />
-                    <div className="flex-1">
+                    <div className="flex-1 pt-14 md:pt-0 overflow-x-hidden">
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/live" element={<LiveMonitor />} />
