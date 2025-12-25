@@ -67,9 +67,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Left side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/20 via-background to-accent/20 p-12 flex-col justify-between">
+    <div className="min-h-screen bg-background flex flex-col lg:flex-row">
+      {/* Left side - Branding (hidden on mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/20 via-background to-accent/20 p-8 xl:p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
@@ -77,40 +77,40 @@ const Auth = () => {
             </div>
             <span className="text-2xl font-bold text-foreground">AlphaMind</span>
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-3xl xl:text-4xl font-bold text-foreground mb-4">
             AI-Powered Trading Intelligence
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base xl:text-lg text-muted-foreground">
             Advanced algorithmic trading with real-time market analysis and automated execution.
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 xl:space-y-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Zap className="w-6 h-6 text-primary" />
+            <div className="w-10 h-10 xl:w-12 xl:h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <Zap className="w-5 h-5 xl:w-6 xl:h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">Lightning Fast Execution</h3>
-              <p className="text-sm text-muted-foreground">Sub-millisecond trade execution</p>
+              <h3 className="font-semibold text-sm xl:text-base text-foreground">Lightning Fast Execution</h3>
+              <p className="text-xs xl:text-sm text-muted-foreground">Sub-millisecond trade execution</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Shield className="w-6 h-6 text-primary" />
+            <div className="w-10 h-10 xl:w-12 xl:h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <Shield className="w-5 h-5 xl:w-6 xl:h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">Enterprise Security</h3>
-              <p className="text-sm text-muted-foreground">Bank-grade encryption & protection</p>
+              <h3 className="font-semibold text-sm xl:text-base text-foreground">Enterprise Security</h3>
+              <p className="text-xs xl:text-sm text-muted-foreground">Bank-grade encryption & protection</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-primary" />
+            <div className="w-10 h-10 xl:w-12 xl:h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 xl:w-6 xl:h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">AI Market Analysis</h3>
-              <p className="text-sm text-muted-foreground">Advanced pattern recognition</p>
+              <h3 className="font-semibold text-sm xl:text-base text-foreground">AI Market Analysis</h3>
+              <p className="text-xs xl:text-sm text-muted-foreground">Advanced pattern recognition</p>
             </div>
           </div>
         </div>
@@ -121,29 +121,29 @@ const Auth = () => {
       </div>
 
       {/* Right side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <Card className="w-full max-w-md border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader className="text-center">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8 min-h-screen lg:min-h-0">
+        <Card className="w-full max-w-sm sm:max-w-md border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="text-center px-4 sm:px-6">
             <div className="flex items-center justify-center gap-2 mb-4 lg:hidden">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold text-foreground">AlphaMind</span>
             </div>
-            <CardTitle className="text-2xl">Welcome</CardTitle>
-            <CardDescription>Sign in to your account or create a new one</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">Welcome</CardTitle>
+            <CardDescription className="text-sm">Sign in to your account or create a new one</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 sm:px-6">
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6">
+                <TabsTrigger value="login" className="text-sm">Sign In</TabsTrigger>
+                <TabsTrigger value="signup" className="text-sm">Sign Up</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                <form onSubmit={handleLogin} className="space-y-3 sm:space-y-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="login-email" className="text-sm">Email</Label>
                     <Input
                       id="login-email"
                       type="email"
@@ -151,10 +151,11 @@ const Auth = () => {
                       value={loginForm.email}
                       onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                       required
+                      className="h-10 sm:h-11"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="login-password" className="text-sm">Password</Label>
                     <div className="relative">
                       <Input
                         id="login-password"
@@ -163,6 +164,7 @@ const Auth = () => {
                         value={loginForm.password}
                         onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                         required
+                        className="h-10 sm:h-11 pr-10"
                       />
                       <Button
                         type="button"
@@ -179,16 +181,16 @@ const Auth = () => {
                       </Button>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-10 sm:h-11" disabled={isLoading}>
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
               </TabsContent>
 
               <TabsContent value="signup">
-                <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                <form onSubmit={handleSignup} className="space-y-3 sm:space-y-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="signup-email" className="text-sm">Email</Label>
                     <Input
                       id="signup-email"
                       type="email"
@@ -196,10 +198,11 @@ const Auth = () => {
                       value={signupForm.email}
                       onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
                       required
+                      className="h-10 sm:h-11"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="signup-password" className="text-sm">Password</Label>
                     <div className="relative">
                       <Input
                         id="signup-password"
@@ -208,6 +211,7 @@ const Auth = () => {
                         value={signupForm.password}
                         onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
                         required
+                        className="h-10 sm:h-11 pr-10"
                       />
                       <Button
                         type="button"
@@ -224,8 +228,8 @@ const Auth = () => {
                       </Button>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="confirm-password" className="text-sm">Confirm Password</Label>
                     <Input
                       id="confirm-password"
                       type={showPassword ? "text" : "password"}
@@ -233,9 +237,10 @@ const Auth = () => {
                       value={signupForm.confirmPassword}
                       onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
                       required
+                      className="h-10 sm:h-11"
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-10 sm:h-11" disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
